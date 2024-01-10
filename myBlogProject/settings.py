@@ -43,9 +43,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms', 'crispy_bootstrap5',
     'App_Blog',
     'App_Login',
 ]
+
+
+# For Forms Support (bootstrap, bootstrap3, bootstrap4, uni-form)
+# Links for Bootstrap or Uni-Form needs to be installed
+# In this project, Bootstrap4, Bootstrap5 links are installed
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -129,6 +137,9 @@ STATICFILES_DIRS = [STATIC_DIR,]
 # Media files
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
+
+# Login url
+LOGIN_URL = '/account/login/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title_block %}
+	Profile
+{% endblock %}
+
+{% block body_block %}
+
+    <h2>Your Profile</h2>
+    {% if user.is_authenticated %}
+  Welcome, {{ user.username }}!
+{% else %}
+  Please log in.
+{% endif %}
+
+    <table>
+        <tr>
+            <th>Username</th>
+            <td class="pl-2">: {{ user.username }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td class="pl-2">: {{ user.email }}</td>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <td class="pl-2">: {{ user.first_name }} {{ user.last_name }}</td>
+        </tr>
+    </table>
+    
+   
+{% endblock %}
