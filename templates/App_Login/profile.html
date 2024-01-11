@@ -8,11 +8,6 @@
 {% block body_block %}
 
     <h2>Your Profile</h2>
-    {% if user.is_authenticated %}
-  Welcome, {{ user.username }}!
-{% else %}
-  Please log in.
-{% endif %}
 
     <table>
         <tr>
@@ -28,6 +23,10 @@
             <td class="pl-2">: {{ user.first_name }} {{ user.last_name }}</td>
         </tr>
     </table>
+
+    <br>
+    <a class="btn btn-primary btn-sm" href="{% url 'App_Login:profileChange' %}">Change Profile Info</a>
+   
     
    
 {% endblock %}
