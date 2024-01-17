@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponseRedirect
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
-from App_Login.forms import signUpForm, userProfileChangeForm
+from django.contrib.auth.forms import AuthenticationForm
+from App_Login.forms import *
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -53,29 +53,65 @@ def profile_page(request):
 @login_required
 def profile_change(request):
     current_user = request.user
+    changedProf = False
     form = userProfileChangeForm(instance = current_user)
     if request.method == "POST":
         form = userProfileChangeForm(request.POST, instance = current_user)
         if form.is_valid():
             form.save()
+            changedProf = True
             form = userProfileChangeForm(instance = current_user)
     context = {
-        "form": form
+        "form": form,
+        "changedProf": changedProf
     }
     return render(request, "App_Login/change_profile.html", context=context)
 
 @login_required
 def password_change(request):
     current_user = request.user
-    changed = False
-    form = PasswordChangeForm(current_user)
+    changedPass = False
+    form = userPasswordChangeForm(current_user)
     if request.method == "POST":
-        form = PasswordChangeForm(current_user, data = request.POST)
+        form = userPasswordChangeForm(current_user, data = request.POST)
         if form.is_valid():
             form.save()
-            changed = True
+            changedPass = True
     context = {
         "form": form,
-        "changed": changed
+        "changedPass": changedPass
     }
     return render(request, "App_Login/change_password.html", context=context)
+
+@login_required
+def profile_picture_change(request):
+    form = userProfilePictureChangeForm()
+
+    if request.method == "POST":
+        form = userProfilePictureChangeForm(request.POST, request.FILES)
+        if form.is_valid():
+            user_obj = form.save(commit=False)
+            user_obj.user = request.user
+            user_obj.save()
+            return HttpResponseRedirect(reverse("App_Login:profile"))
+
+    context = {
+        "form": form,
+    }
+    return render(request, "App_Login/change_profilePic.html", context=context)
+
+
+@login_required
+def profile_picture_update(request):
+    form = userProfilePictureChangeForm(instance=request.user.user_profile)
+
+    if request.method == "POST":
+        form = userProfilePictureChangeForm(request.POST, request.FILES, instance=request.user.user_profile)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("App_Login:profile"))
+
+    context = {
+        "form": form,
+    }
+    return render(request, "App_Login/change_profilePic.html", context=context)
