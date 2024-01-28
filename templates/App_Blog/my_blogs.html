@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load custom_filters %}
+
+{% block title_block %}
+	My Blogs
+{% endblock %}
+
+{% block body_block %}
+	{% if user.post_author %}
+		{% for blog in user.post_author.all %}
+		<h3>{{ blog.blog_title }}</h3>
+		<h6><i>{{ blog.publish_date }}</i></h6>
+		<div class="row">
+			<div class="col-sm-4">
+				<img src="/media/{{ blog.blog_image }}" alt="{{ blog.blog_title }}" title="{{ blog.blog_title }}" width="100%" height="300px">
+			</div>
+			<div class="col-sm-8">
+				<p class="text-justify">{{ blog.blog_content|range_filter|linebreaksbr }}<a href="{% url 'App_Blog:blog_details' slug1=blog.slug %}">Read More</a></p>
+				<h6>
+					<i class="fa-regular fa-thumbs-up" style="color: #3FB7B9;"></i>
+					{{ blog.blog_likes.count }}
+					<i class="fa-regular fa-message" style="color: #3FB7B9;"></i>
+					{{ blog.blog_comment.count }}
+				</h6>
+				<br>
+				<button class="btn btn-sm btn-info"><a href="{% url 'App_Blog:edit_blog' pk=blog.pk %}" class="nav-link">Edit Blog</a></button>
+			</div>
+		</div>
+		<br><hr>
+		{% endfor %}
+	{% else %}
+		<h4 class="alert alert-secondary">You haven't written any blog yet.</h4>
+		<button class="btn btn-primary"><a class="nav-link" href="{% url 'App_Blog:create_blog' %}">Write Blog</a></button>
+	{% endif %}
+{% endblock %}
